@@ -32,6 +32,8 @@ Route::post('/users/login', [UserController::class, 'onLogin'])->name('user.logi
 Route::post('/users/register', [UserController::class, 'onRegister'])->name('user.register');
 Route::get('/users-get/balance/', [UserController::class, 'getBalanceOfId'])->name('user.getBalanceOfId');
 Route::get('/users-get/infor/', [UserController::class, 'getInformation'])->name('user.getInformation');
+Route::post('/users-post/avatar/', [UserController::class, 'updateLogo'])->name('user.updateLogo');
+Route::get('/users-get/avatar/', [UserController::class, 'getLogo'])->name('user.getLogo');
 
 
 //Coupon
