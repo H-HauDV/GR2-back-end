@@ -34,6 +34,8 @@ Route::get('/users-get/balance/', [UserController::class, 'getBalanceOfId'])->na
 Route::get('/users-get/infor/', [UserController::class, 'getInformation'])->name('user.getInformation');
 Route::post('/users-post/avatar/', [UserController::class, 'updateLogo'])->name('user.updateLogo');
 Route::get('/users-get/avatar/', [UserController::class, 'getLogo'])->name('user.getLogo');
+Route::post('/users-create/money-request/', [UserController::class, 'makeMoneyRequest'])->name('user.makeMoneyRequest');
+
 
 
 //Coupon

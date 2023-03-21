@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\CreditRequest;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -135,9 +137,9 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['success' => 0, 'message' => "Require user id!"], 401);
         }
-        $logoURL= $request->logoURL;
-        if($logoURL==""){
-            $logoURL=NULL;
+        $logoURL = $request->logoURL;
+        if ($logoURL == "") {
+            $logoURL = NULL;
         }
         try {
             $user = User::where('id', $request->id)->update(
@@ -159,7 +161,36 @@ class UserController extends Controller
         }
         try {
             $user = User::select('avatar')->where("id", $request->id)->get();
-            return response()->json(['success' => 0, 'avatar' => $user[0]->avatar], 200);
+            return response()->json(['success' => 1, 'avatar' => $user[0]->avatar], 200);
+        } catch (Exception $e) {
+            return response()->json(['success' => 0, 'message' => $e->getMessage()], 400);
+        }
+    }
+    public function makeMoneyRequest(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|numeric',
+            'ammount' => 'required',
+            'metamask_account' => 'required',
+
+            
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => 0, 'message' => "Error in validate required fields!"], 401);
+        }
+        try {
+            $postArray = [
+                'user_id'      => $request->user_id,
+                'metamask_account'      => $request->metamask_account,
+
+                'ammount'     => $request->ammount,
+                'message' => $request->message,
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'status'     => 'pending',
+            ];
+            $creditRequest = CreditRequest::create($postArray);
+            return response()->json(['success' => 1, 'data' => $creditRequest], 200);
         } catch (Exception $e) {
             return response()->json(['success' => 0, 'message' => $e->getMessage()], 400);
         }
